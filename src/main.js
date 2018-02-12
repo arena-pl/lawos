@@ -28,16 +28,20 @@ class Lawos {
   }
 
   invokeLambda (arn, data) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.aws.lambda.invoke(
         {
           FunctionName: arn,
-          InvocationType: 'Event',
-          LogType: 'None',
+          InvocationType: 'RequestResponse',
+          LogType: 'Tail',
           Payload: JSON.stringify(data)
         },
-        (err, res) => {
-          resolve(err || res)
+		(err, res) => {
+			if(!res.FunctionError){				
+				resolve(err || res);
+			} else {				
+				reject(res.FunctionError);
+			}          
         }
       )
     })
