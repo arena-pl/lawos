@@ -37,11 +37,15 @@ class Lawos {
           Payload: JSON.stringify(data)
         },
 		(err, res) => {
-			if(!res.FunctionError){				
-				resolve(err || res);
-			} else {				
-				reject(res.FunctionError);
-			}          
+			if (res) {
+				if(!res.FunctionError){				
+					resolve(err || res);
+				} else {				
+					reject(res.FunctionError);
+				}  
+			} else {
+				reject(err);
+			}
         }
       )
     })
